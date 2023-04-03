@@ -59,7 +59,8 @@ class ChatUser {
     if (msg.type === 'join') this.handleJoin(msg.name);
     else if (msg.type === 'chat') this.handleChat(msg.text);
     else if (msg.type === 'joke') this.room.tellJoke({name: this.name});
-    else if (msg.type === 'members') this.room.listRoomMembers();
+    else if (msg.type === 'members') this.room.listRoomMembers({name: this.name});
+    else if (msg.type === 'private') this.room.private({user: msg.user, me: msg.me, text: msg.text});
     else throw new Error(`bad message: ${msg.type}`);
   }
 

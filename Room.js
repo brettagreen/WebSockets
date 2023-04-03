@@ -79,6 +79,22 @@ class Room {
     }
     user.send(JSON.stringify({type: 'members', text: members}));
   }
+
+  private(data) {
+    let user;
+    let me;
+    for (let member of this.members.values()) {
+      if (member.name === data.user) {
+        user = member;
+      } else if (member.name === data.me) {
+        me = member;
+      } else if (user !== undefined && me !== undefined) {
+        break;
+      }
+    }
+    user.send(JSON.stringify({type: 'private', text: `private msg from ${data.me}: ` + data.text}));
+    me.send(JSON.stringify({type: 'private', text: `private msg to ${data.user}: ` + data.text}));
+  }
 }
 
 module.exports = Room;

@@ -26,7 +26,7 @@ ws.onmessage = function(evt) {
   let msg = JSON.parse(evt.data);
   let item;
 
-  if (msg.type === "note" || msg.type === 'joke') {
+  if (msg.type === "note" || msg.type === 'joke' || msg.type === 'private') {
     item = $(`<li><i>${msg.text}</i></li>`);
   } else if (msg.type === "chat") {
     item = $(`<li><b>${msg.name}: </b>${msg.text}</li>`);
@@ -56,7 +56,6 @@ ws.onclose = function (evt) {
   console.log("close", evt);
 };
 
-
 /** send message when button pushed. */
 
 $('form').submit(function (evt) {
@@ -69,6 +68,10 @@ $('form').submit(function (evt) {
     data = {type: 'joke'};
   } else if (val === '/members') {
     data = {type: 'members'};
+  } else if (val.startsWith('/priv')) {
+    const args = val.split(' ');
+    const getText = ([x,y,...args]) => args
+    data = {type: 'private', user: args[1], me: name, text: getText(args).join(' ')};
   } else {
     data = {type: "chat", text: val}
   }
